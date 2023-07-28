@@ -1,36 +1,56 @@
 import express from "express";
 import Post from "../model/post";
-import mongoose from "mongoose";
+import { handleErrorResponse } from "../utils/handleErrorResponse";
 
 const router = express.Router();
 
-const demoPost = {
-    title: "Demo Post",
-    slug: "demo-post",
-    published: true,
-    content: "This is a demo post",
-    tags: ["demo", "post"],
-    createdAt: Date.now(),
-};
-
 router.post("/", async function (req, res) {
-    const { title } = req.body; // TODO ADD REST OF FIELDS
+    const post = new Post(req.body);
 
-    console.log({ 
-        ...demoPost,
-        title: title ? title : demoPost.title,
-    })
+    try {
+        const savedPost = await post.save();
+        res.status(201).json(savedPost);
+    } catch (err) {
+        handleErrorResponse(err, res);
+    }
+});
 
-	const post = new Post({ 
-        ...demoPost,
-        title: title ? title : demoPost.title,
-    });
+router.get("/:postId", async function (req, res) {
+    const id = req.params.postId;
 
-    console.log(post);
+    try {
+        const post = await Post.findById(id);
+        if (!post) throw new Error("Post not found");
+        res.status(200).json(post);
+    } catch (err) {
+        handleErrorResponse(err, res, 404);
+    }
+});
 
-    await post.save();
+router.patch("/:postId", async function (req, res) {
+    const id = req.params.postId;
 
-	res.status(201).json(post);
+    try {
+        const updatedPost = await Post.findByIdAndUpdate(id, req.body, {
+            new: true,
+        });
+        if (!updatedPost) throw new Error("Post not found");
+        res.status(200).json(updatedPost);
+    } catch (err) {
+        handleErrorResponse(err, res, 404);
+    }
+});
+
+router.delete("/:postId", async function (req, res) {
+    const id = req.params.postId;
+
+    try {
+        const deletedPost = await Post.findByIdAndDelete(id);
+        if (!deletedPost) throw new Error("Post not found");
+        res.status(204).end();
+    } catch (err) {
+        handleErrorResponse(err, res, 404);
+    }
 });
 
 export default router;
