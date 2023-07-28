@@ -1,7 +1,7 @@
-import mongoose, { SchemaTypes } from "mongoose";
+import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
-const blogSchema = new Schema({
+const postSchema = new Schema({
     title: {
         type: String,
         required: true,
@@ -25,10 +25,10 @@ const blogSchema = new Schema({
     updatedAt: Date,
 });
 
-blogSchema.pre("save", function (next) {
-    this.updatedAt = Date.now() as unknown as Date; // update the date every time a blog post is saved
+postSchema.pre("save", function (next) {
+    this.updatedAt = Date.now() as unknown as Date; // update the date every time a post post is saved
     next();
 });
 
-const Blog = model("Blog", blogSchema);
-export default Blog;
+const Post = model("Post", postSchema);
+export default Post;

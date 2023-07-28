@@ -1,5 +1,3 @@
-import mongoose from "mongoose";
-import "dotenv/config";
 
 import express from "express";
 import bodyParser from "body-parser";
@@ -7,19 +5,14 @@ import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
 import options from "./swaggerOptions";
+import { connectToDB } from "./database";
+import postsRouter from "./routes/posts";
+import postRouter from "./routes/post";
 
-// DATABASE
+// DB 
+connectToDB();
 
-const username = process.env.USERNAME;
-const password = process.env.PASSWORD;
-const server = process.env.SERVER;
-
-mongoose.connect(
-    `mongodb+srv://${username}:${password}@${server}/?retryWrites=true&w=majority`
-);
-
-// API
-
+// EXPRESS SERVER
 const app = express();
 app.use(
     bodyParser.urlencoded({
@@ -33,6 +26,12 @@ app.listen(PORT);
 
 console.debug("Server listening on port: " + PORT);
 
+// APIs
+app.use("/posts", postsRouter);
+app.use("/post", postRouter);
+
+
+// SWAGGER
 // we need to use swaggerJsdoc to convert the yaml files to json
 const specs = swaggerJsdoc({
     ...options,

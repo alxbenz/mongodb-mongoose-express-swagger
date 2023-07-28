@@ -1,0 +1,74 @@
+---
+components:
+    schemas:
+        Post:
+            type: object
+            required:
+                - title
+                - slug
+                - createdAt
+                - updatedAt
+                - published
+            properties:
+                id:
+                    type: string
+                    description: The auto-generated id of the post
+                title:
+                    type: string
+                    description: The title of the post
+                slug:
+                    type: string
+                    description: The slug of the post
+                createdAt:
+                    type: string
+                    format: date
+                    description: The date when the post was created
+                updatedAt:
+                    type: string
+                    format: date
+                    description: The date when the post was last updated
+                published:
+                    type: boolean
+                    description: The status if the post is currently published
+            example:
+                id: d5fE_asz
+                title: What a great post
+                slug: what-a-great-post
+                published: false
+                createdAt: 2020-03-10T04:05:06.157Z
+                updatedAt: 2023-03-10T04:05:06.157Z
+paths:
+    /post:
+        post:
+            summary: Create a new post
+            tags:
+                - Post
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Post"
+            responses:
+                "200":
+                    description: The created Post.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Post"
+                "500":
+                    description: Some server error
+    /posts:
+        get: 
+            summary: Get all posts
+            tags:
+                - Post
+            responses:
+                "200":
+                    description: All available Posts.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Post"
+                "500":
+                    description: Some server error
