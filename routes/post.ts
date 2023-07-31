@@ -53,4 +53,32 @@ router.delete("/:postId", async function (req, res) {
     }
 });
 
+router.get("/:postId/publish", async function (req, res) {
+    const id = req.params.postId;
+
+    try {
+        const updatedPost = await Post.findByIdAndUpdate(id, {
+            published: true,
+        });
+        if (!updatedPost) throw new Error("Post not found");
+        res.status(204).end();
+    } catch (err) {
+        handleErrorResponse(err, res, 404);
+    }
+});
+
+router.get("/:postId/unpublish", async function (req, res) {
+    const id = req.params.postId;
+
+    try {
+        const updatedPost = await Post.findByIdAndUpdate(id, {
+            published: false,
+        });
+        if (!updatedPost) throw new Error("Post not found");
+        res.status(204).end();
+    } catch (err) {
+        handleErrorResponse(err, res, 404);
+    }
+});
+
 export default router;

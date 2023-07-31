@@ -120,6 +120,30 @@ paths:
             type: string
           required: true
           description: ID of the post to delete
+  "/post/{postId}/publish":
+    get:
+      summary: publish the post
+      tags: 
+        - Post
+      parameters:
+        - in: path
+          name: postId
+          schema:
+            type: string
+          required: true
+          description: ID of the post to publish
+  "/post/{postId}/unpublish":
+    get:
+      summary: unpublish the post
+      tags: 
+        - Post
+      parameters:
+        - in: path
+          name: postId
+          schema:
+            type: string
+          required: true
+          description: ID of the post to unpublish
   /posts:
     get:
       summary: Get all posts
