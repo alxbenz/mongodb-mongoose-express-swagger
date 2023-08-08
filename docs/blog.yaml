@@ -6,8 +6,6 @@ components:
       required:
         - title
         - slug
-        - createdAt
-        - updatedAt
         - published
       properties:
         id:
@@ -109,9 +107,9 @@ paths:
           description: Post not found
         "500":
           description: Some server error
-    delete: 
+    delete:
       summary: Deletes the post by postId
-      tags: 
+      tags:
         - Post
       parameters:
         - in: path
@@ -120,10 +118,13 @@ paths:
             type: string
           required: true
           description: ID of the post to delete
+      responses:
+        "204":
+          description: Post deleted
   "/post/{postId}/publish":
     get:
       summary: publish the post
-      tags: 
+      tags:
         - Post
       parameters:
         - in: path
@@ -135,7 +136,7 @@ paths:
   "/post/{postId}/unpublish":
     get:
       summary: unpublish the post
-      tags: 
+      tags:
         - Post
       parameters:
         - in: path
