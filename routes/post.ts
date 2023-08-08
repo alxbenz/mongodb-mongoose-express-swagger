@@ -7,6 +7,8 @@ const router = express.Router();
 router.post("/", async function (req, res) {
     const post = new Post(req.body);
 
+    post.createdAt = Date.now() as unknown as Date;
+
     try {
         const savedPost = await post.save();
         res.status(201).json(savedPost);
